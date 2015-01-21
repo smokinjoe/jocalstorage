@@ -53,8 +53,19 @@ var JocalStorage = (function (_) {
     init: function (namespace) {
       _loadCache(namespace);
     },
-    store: function (obj) {
-      return _store(obj);
+    store: function (arg) {
+      var result;
+      if (Array.isArray(arg)) {
+        result = [];
+        for (var i = 0; i < arg.length; i++) {
+          result.push(_store(arg[i]));
+        }
+      }
+      else {
+        result = _store(arg);
+      }
+
+      return result;
     },
     fetchCache: function () {
       return cache;
