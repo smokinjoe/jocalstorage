@@ -1,4 +1,4 @@
-var JocalStorage = function () {
+var JocalStorage = (function (_) {
   var cache = [];
   var properties = {};
   var namespace = "JOE";
@@ -21,11 +21,12 @@ var JocalStorage = function () {
 
   var _store = function (obj) {
     // the address may be an issue here with dupes
+    // also doesn't work when obj is an array, fix that
     if (!_.contains(cache, obj)) {
       obj.id = ++properties.lastId;
       cache.push(obj);
       _digest();
-      return obj.id;
+      return obj;
     }
     return false;
   };
@@ -45,7 +46,7 @@ var JocalStorage = function () {
     cache = [];
     properties = {};
     localStorage.clear();
-    digest();
+    _digest();
   };
 
   return {
@@ -65,4 +66,4 @@ var JocalStorage = function () {
       _clearCache();
     }
   };
-};
+}(_));
