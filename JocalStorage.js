@@ -1,11 +1,23 @@
-var JocalStorage = (function (_) {
-  var cache = [];
-  var properties = {};
-  var namespace = "JOE";
+var JocalStorage = (function (win, _) {
+  var cache = [],
+    properties = {},
+    namespace = "JOE";
 
-  var _loadCache = function (ns) {
+  // Functions to encapsulate questionable FireFox 3.6.13 behavior
+  // when about.config::dom.storage.enabled === false
+  // See https://github.com/marcuswestin/store.js/issues#issue/13
+  var _isLocalStorageSupported = function () {
+    try { return ('localStorage' in win && win['localStorage']); }
+    catch (err) { return false; }
+  };
+
+  var _initialize = function (ns) {
     namespace = ns || namespace;
-    if (localStorage) {
+    _loadCache();
+  };
+
+  var _loadCache = function () {
+    if (_isLocalStorageSupported()) {
       cache = JSON.parse(localStorage.getItem(namespace + ":cache")) || [];
       properties = JSON.parse(localStorage.getItem(namespace + ":properties")) || {};
       properties.lastId = properties.lastId || 0;
@@ -13,7 +25,7 @@ var JocalStorage = (function (_) {
   };
 
   var _digest = function () {
-    if (localStorage) {
+    if (_isLocalStorageSupported()) {
       localStorage.setItem(namespace + ":cache", JSON.stringify(cache));
       localStorage.setItem(namespace + ":properties", JSON.stringify(properties));
     }
@@ -42,7 +54,7 @@ var JocalStorage = (function (_) {
     }
   };
 
-  _clearCache = function () {
+  var _nuke = function () {
     cache = [];
     properties = {};
     localStorage.clear();
@@ -51,7 +63,7 @@ var JocalStorage = (function (_) {
 
   return {
     init: function (namespace) {
-      _loadCache(namespace);
+      _initialize(namespace);
     },
     store: function (arg) {
       var result;
@@ -67,14 +79,14 @@ var JocalStorage = (function (_) {
 
       return result;
     },
-    fetchCache: function () {
+    fetch: function () {
       return cache;
     },
-    removeFromCache: function (id) {
+    remove: function (id) {
       _removeFromCache(id);
     },
     clear: function () {
-      _clearCache();
+      _nuke();
     }
   };
-}(_));
+}(_, window));
