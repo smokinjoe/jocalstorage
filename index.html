@@ -12,5 +12,17 @@
 
     <script type="text/javascript" src="lodash.js"></script>
     <script type="text/javascript" src="JocalStorage.js"></script>
+    <script type="text/javascript">
+      // testing sandbox sandbox
+      var Person = function (name) {
+        this.name = name;
+      },
+        names = ['Joe', 'Brian', 'Pat', 'Chris', 'Sean'],
+        people = [];
+
+      for (var i = 0; i < names.length; i++) {
+        people.push(new Person(names[i]));
+      }
+    </script>
   </body>
 </html>

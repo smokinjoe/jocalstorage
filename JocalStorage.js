@@ -1,4 +1,4 @@
-var JocalStorage = (function (win, _) {
+var JocalStorage = (function (_, win) {
   var cache = [],
     properties = {},
     namespace = "JOE";
@@ -14,6 +14,9 @@ var JocalStorage = (function (win, _) {
   var _initialize = function (ns) {
     namespace = ns || namespace;
     _loadCache();
+    // JOE: have some sort of initialized flag
+    // don't like how user can still access _loadCache despite an uninitialized state
+    // or perhaps vocalize that if uninitialized, the namespace is set to JOE by default
   };
 
   var _loadCache = function () {
@@ -32,14 +35,17 @@ var JocalStorage = (function (win, _) {
   };
 
   var _get = function (id) {
+    var result = false;
     for (var i = 0; i < cache.length; i++) {
-      
+      if (cache[i].id === id) {
+        result = cache[i];
+      }
     }
+    return result;
   };
 
   var _store = function (obj) {
-    // the address may be an issue here with dupes
-    // also doesn't work when obj is an array, fix that
+    // JOE: doesn't really do anything ... should I have the test revolve around id?
     if (!_.contains(cache, obj)) {
       obj.id = ++properties.lastId;
       cache.push(obj);
