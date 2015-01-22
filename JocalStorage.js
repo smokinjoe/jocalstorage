@@ -31,6 +31,12 @@ var JocalStorage = (function (win, _) {
     }
   };
 
+  var _get = function (id) {
+    for (var i = 0; i < cache.length; i++) {
+      
+    }
+  };
+
   var _store = function (obj) {
     // the address may be an issue here with dupes
     // also doesn't work when obj is an array, fix that
@@ -51,7 +57,10 @@ var JocalStorage = (function (win, _) {
     if (removed.length > 0) {
       _digest();
       _loadCache();
+      return removed;
     }
+
+    return false;
   };
 
   var _nuke = function () {
@@ -79,7 +88,10 @@ var JocalStorage = (function (win, _) {
 
       return result;
     },
-    fetch: function () {
+    get: function (id) {
+      if (id) {
+        return _get(id);
+      }
       return cache;
     },
     remove: function (id) {
