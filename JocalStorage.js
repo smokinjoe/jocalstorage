@@ -50,7 +50,7 @@ var JocalStorage = (function (_, win) {
       obj.id = ++properties.lastId;
       cache.push(obj);
       _digest();
-      return obj;
+      return obj.id;
     }
     return false;
   };
