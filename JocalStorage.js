@@ -36,7 +36,7 @@ var JocalStorage = function (options) {
       }
     }
     return result;
-  }
+  };
 
   var store = function (obj) {
     // JOE: doesn't really do anything ... should I have the test revolve around id?
